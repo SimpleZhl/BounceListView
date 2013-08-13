@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -22,6 +23,9 @@ import android.widget.OverScroller;
  */
 public class BounceListView extends AdapterView<ListAdapter> implements
         OnTouchListener {
+
+    /** Used to identify the source of a log message. */
+    static final String TAG = BounceListView.class.getName();
 
     /** The overshoot the bounds of a scrolling operation. */
     OverScroller mScroller;
@@ -123,14 +127,22 @@ public class BounceListView extends AdapterView<ListAdapter> implements
     SimpleOnGestureListener mGestureListener = new SimpleOnGestureListener() {
 
         @Override
+        public boolean onDown(MotionEvent e) {
+            Log.d(TAG, "onDown y:: " + e.getY());
+            return true;
+        }
+
+        @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                 float velocityY) {
+            Log.d(TAG, "onFling velocityY:: " + velocityY);
             return super.onFling(e1, e2, velocityX, velocityY);
         }
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2,
                 float distanceX, float distanceY) {
+            Log.d(TAG, "onScroll distanceY:: " + distanceY);
             return super.onScroll(e1, e2, distanceX, distanceY);
         }
     };
