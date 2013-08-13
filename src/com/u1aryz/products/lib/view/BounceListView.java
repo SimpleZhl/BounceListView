@@ -1,7 +1,6 @@
 package com.u1aryz.products.lib.view;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -37,7 +36,7 @@ public class BounceListView extends AdapterView<ListAdapter> implements
     GestureDetector mGestureDetector;
 
     /** A list of cached (re-usable) item views. */
-    final List<View> mCachedItemViews = new LinkedList<View>();
+    final LinkedList<View> mCachedItemViews = new LinkedList<View>();
 
     /**
      * Constructor.
@@ -118,6 +117,18 @@ public class BounceListView extends AdapterView<ListAdapter> implements
     protected void onLayout(boolean changed, int left, int top, int right,
             int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+    }
+
+    /**
+     * Checks if there is a cached view that can be used.
+     * 
+     * @return A cached view or, if none was found, null
+     */
+    View getCachedView() {
+        if (mCachedItemViews.size() != 0) {
+            mCachedItemViews.removeFirst();
+        }
+        return null;
     }
 
     /**
