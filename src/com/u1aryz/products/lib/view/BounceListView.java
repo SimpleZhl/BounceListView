@@ -37,7 +37,7 @@ public class BounceListView extends AdapterView<ListAdapter> implements
     GestureDetector mGestureDetector;
 
     /** A list of cached (re-usable) item views. */
-    List<View> mCachedItemViews = new LinkedList<View>();
+    final List<View> mCachedItemViews = new LinkedList<View>();
 
     /**
      * Constructor.
@@ -124,7 +124,7 @@ public class BounceListView extends AdapterView<ListAdapter> implements
      * A convenience class to extend when you only want to listen for a subset
      * of all the gestures.
      */
-    SimpleOnGestureListener mGestureListener = new SimpleOnGestureListener() {
+    final SimpleOnGestureListener mGestureListener = new SimpleOnGestureListener() {
 
         @Override
         public boolean onDown(MotionEvent e) {
