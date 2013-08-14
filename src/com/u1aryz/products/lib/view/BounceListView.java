@@ -38,6 +38,12 @@ public class BounceListView extends AdapterView<ListAdapter> implements
     /** A list of cached (re-usable) item views. */
     final LinkedList<View> mCachedItemViews = new LinkedList<View>();
 
+    /** The adaptor position of the first visible item. */
+    int mCurrentTopItemPosition;
+
+    /** The adaptor position of the last visible item. */
+    int mCurrentLastItemPosition;
+
     /**
      * Constructor.
      * 
@@ -88,6 +94,8 @@ public class BounceListView extends AdapterView<ListAdapter> implements
     @Override
     public void setAdapter(ListAdapter adapter) {
         mAdapter = adapter;
+        removeAllViewsInLayout();
+        requestLayout();
     }
 
     @Override
@@ -111,11 +119,16 @@ public class BounceListView extends AdapterView<ListAdapter> implements
 
     @Override
     public void computeScroll() {
+        Log.d(TAG, "computeScroll");
+        if (mScroller.computeScrollOffset()) {
+            scrollTo(0, mScroller.getCurrY());
+        }
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right,
             int bottom) {
+        Log.d(TAG, "onLayout changed:: " + changed);
         super.onLayout(changed, left, top, right, bottom);
     }
 
@@ -129,6 +142,26 @@ public class BounceListView extends AdapterView<ListAdapter> implements
             mCachedItemViews.removeFirst();
         }
         return null;
+    }
+
+    /**
+     * Fling the this view.
+     * 
+     * @param velocityY
+     */
+    void fling(int velocityY) {
+        mScroller.fling(0, getScrollY(), 0, velocityY, 0, 0, 0,
+                Integer.MAX_VALUE);
+        invalidate();
+    }
+
+    /**
+     * Scroll the this view.
+     * 
+     * @param distanceY
+     */
+    void scroll(int distanceY) {
+        scrollBy(0, distanceY);
     }
 
     /**
@@ -147,6 +180,7 @@ public class BounceListView extends AdapterView<ListAdapter> implements
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                 float velocityY) {
             Log.d(TAG, "onFling velocityY:: " + velocityY);
+            fling((int) velocityY);
             return super.onFling(e1, e2, velocityX, velocityY);
         }
 
@@ -154,7 +188,14 @@ public class BounceListView extends AdapterView<ListAdapter> implements
         public boolean onScroll(MotionEvent e1, MotionEvent e2,
                 float distanceX, float distanceY) {
             Log.d(TAG, "onScroll distanceY:: " + distanceY);
+            scroll((int) distanceY);
             return super.onScroll(e1, e2, distanceX, distanceY);
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            Log.d(TAG, "onSingleTapUp");
+            return super.onSingleTapUp(e);
         }
     };
 }
